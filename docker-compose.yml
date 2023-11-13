@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
+    networks:
+      - dotnetn
+  db:
+    image: mcr.microsoft.com/mssql/server
+    container_name: db
+    ports:
+      - '1433:1433'
+    volumes:
+      - 'mssql_data:/var/opt/mssql/data'
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=passwordHard!_+1s2t394
+      - MSSQL_PID=Express
+networks:
+  dotnetn:
+    name: dotnetn
+    driver: bridge
+volumes:
+  mssql_data:
+    name: mssql_vol
+    driver: local
